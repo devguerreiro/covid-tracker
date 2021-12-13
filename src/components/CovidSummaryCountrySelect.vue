@@ -4,7 +4,7 @@
     class="form-select mt-10 block w-full border p-3 rounded"
     @change="$emit('changed', selectedCountry)"
   >
-    <option value="0">
+    <option :value="0">
       Select Country
     </option>
     <option

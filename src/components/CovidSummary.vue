@@ -24,7 +24,9 @@
 import { Options, Vue } from 'vue-class-component';
 import { namespace } from 'vuex-class';
 
-import { ICountrySummary, ISummary, TSummaryDetail } from '@/models/covid';
+import {
+  ICountrySummary, ISummary, TSummaryDetail,
+} from '@/models/covid';
 
 import CovidSummaryTitle from './CovidSummaryTitle.vue';
 import CovidSummaryContent from './CovidSummaryContent.vue';
@@ -36,11 +38,11 @@ const CovidStore = namespace('covid');
   components: { CovidSummaryTitle, CovidSummaryContent, CovidSummaryCountrySelect },
 })
 export default class CovidSummary extends Vue {
+  title!: string
+
   loading = false;
 
   delay = 500
-
-  title!: string
 
   summary!: ISummary
 
@@ -53,10 +55,20 @@ export default class CovidSummary extends Vue {
   @CovidStore.Action
   setSummaryDetail!: (summaryDetail: TSummaryDetail) => TSummaryDetail
 
-  handleSetSummaryDetail(countryDetail: ICountrySummary): void {
-    this.setSummaryDetail(countryDetail);
+  handleSetSummaryDetail(countryDetail: number | ICountrySummary): void {
+    if (countryDetail === 0) {
+      this.setGlobalSummary(this.summary);
+    } else {
+      const countrySummary = (countryDetail as ICountrySummary);
 
-    this.title = countryDetail.Country;
+      this.setSummaryDetail(countrySummary);
+      this.title = countrySummary.Country;
+    }
+  }
+
+  setGlobalSummary(summary: ISummary): void {
+    this.setSummaryDetail(summary.Global);
+    this.title = 'Global';
   }
 
   created(): void {
@@ -65,8 +77,7 @@ export default class CovidSummary extends Vue {
     setTimeout(async () => {
       this.summary = await this.getSummary();
 
-      this.title = 'Global';
-      this.setSummaryDetail(this.summary.Global);
+      this.setGlobalSummary(this.summary);
 
       this.loading = false;
     }, this.delay);

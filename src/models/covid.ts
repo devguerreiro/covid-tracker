@@ -1,5 +1,4 @@
 export interface IGlobalSummary {
-  Slug: 'Global',
   NewConfirmed: number,
   TotalConfirmed: number,
   NewDeaths: number,
