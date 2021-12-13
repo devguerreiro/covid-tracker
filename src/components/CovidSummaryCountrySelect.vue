@@ -30,5 +30,9 @@ export default class CovidCountrySelect extends Vue {
   @Prop({ type: Array, required: true }) countriesOptions!: Array<ICountrySummary>
 
   selectedCountry: ICountrySummary | null = null
+
+  public reset(): void {
+    this.selectedCountry = null;
+  }
 }
 </script>

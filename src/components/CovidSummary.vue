@@ -6,9 +6,18 @@
     />
     <CovidSummaryContent :summary-detail="summaryDetail" />
     <CovidSummaryCountrySelect
+      ref="countrySelect"
       :countries-options="summary.Countries"
       @changed="handleSetSummaryDetail"
     />
+    <div class="flex justify-center">
+      <button
+        class="bg-blue-800 mt-10 rounded-lg text-white p-4"
+        @click="backToGlobalSummary"
+      >
+        See Global Summary
+      </button>
+    </div>
   </main>
   <main v-else>
     <div class="flex flex-col justify-center items-center">
@@ -38,6 +47,10 @@ const CovidStore = namespace('covid');
   components: { CovidSummaryTitle, CovidSummaryContent, CovidSummaryCountrySelect },
 })
 export default class CovidSummary extends Vue {
+  declare $refs: {
+    countrySelect: CovidSummaryCountrySelect
+  }
+
   title!: string
 
   loading = false;
@@ -69,6 +82,12 @@ export default class CovidSummary extends Vue {
   setGlobalSummary(summary: ISummary): void {
     this.setSummaryDetail(summary.Global);
     this.title = 'Global';
+  }
+
+  backToGlobalSummary(): void {
+    this.$refs.countrySelect.reset();
+
+    this.setGlobalSummary(this.summary);
   }
 
   created(): void {
