@@ -1,10 +1,12 @@
 <template>
-  <div />
+  <CovidSummary />
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import { Options, Vue } from 'vue-class-component';
 
-@Options({})
+import CovidSummary from '../components/CovidSummary.vue';
+
+@Options({ components: { CovidSummary } })
 export default class Home extends Vue {}
 </script>
